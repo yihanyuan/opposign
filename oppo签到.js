@@ -5,6 +5,9 @@ ui.layout(
         <button marginTop="50" id="addGroup" layout_gravity="center" text="加qq群" />
         <button id="on" layout_gravity="center" text="打开无障碍" />
         <button id="start" layout_gravity="center" text="开始签到" />
+        <button id="startugcvideo" layout_gravity="center" text="开始刷爆赞小视屏" />
+        <button id="startyoli" layout_gravity="center" text="开始刷视屏(请安装40.4.0.0.1beta版)" />
+
     </vertical>
 
 );
@@ -17,6 +20,17 @@ ui.start.click(function () {
         main();
     });
 });
+ui.startugcvideo.click(function () {
+    threads.start(function () {
+        ugcvideo();
+    });
+});
+ui.startyoli.click(function () {
+    threads.start(function () {
+        yoli();
+    });
+});
+
 ui.on.click(function () {
     auto.waitFor();
 });
@@ -26,12 +40,58 @@ function toQqGroup() {
         data: "mqqopensdkapi://bizAgent/qm/qr?url=http%3A%2F%2Fqm.qq.com%2Fcgi-bin%2Fqm%2Fqr%3Ffrom%3Dapp%26p%3Dandroid%26k%3DU_5WjaiHILGlq2ZvxHthjg9JCvnReNoh"
     });
 }
+
+function yoli() {
+    toast("打开视屏");
+    if (app.launchPackage("com.heytap.yoli")) {
+        toastLog("等待4秒");
+        sleep(4000);
+        var target = id("comment_cnt");
+        log(target.click());
+        setInterval(function () {
+            var lq = id("awards").findOne().bounds();
+            click(lq.centerX(), lq.centerY());
+            sleep(1000);
+            text("领取").findOne().click();
+        }, 1000 * 60 * 5);
+
+        // back();
+        // while()
+        // var target = id("comment_cnt");
+        // log(target.click());
+        // var target = child.findOne(id("video_length"));
+        // log(target.click());
+        toast("已完成");
+    } else {
+        toast("软件不存在，进行下一个");
+    }
+}
+function ugcvideo() {
+    toast("打开暴赞小视屏");
+    if (app.launchPackage("com.heytap.ugcvideo.praise")) {
+        toastLog("等待3秒");
+        sleep(2000);
+        var count = 1;
+        while (count < 11 * 6) {
+            log(swipe(device.width / 2, device.height * 3 / 4, device.width / 2, device.height / 2, 500));
+            toast("10秒后滑动");
+            sleep(10000);
+        }
+        var lq = id("awards").findOne().bounds();
+        click(lq.centerX(), lq.centerY());
+        sleep(1000);
+        text("领取").findOne().click();
+        toast("已完成");
+    } else {
+        toast("软件不存在，进行下一个");
+    }
+}
 function main() {
-    auto.waitFor();
     toast("等待3秒钟");
     sleep(3000);
     alert("开始执行任务了，请不要随意切换应用");
     sleep(2000);
+    healthSign();
     yoliSign();
     storeSign();
     communitySign();
@@ -67,7 +127,23 @@ function storeSign() {
     toast("开始下一个，等待3秒钟");
     sleep(3000);
 }
-
+function healthSign() {
+    toast("打开运动健康");
+    if (app.launchPackage("com.heytap.health")) {
+        sleep(4000);
+        closeupdate();
+        id("iv_avatar").waitFor();
+        log(click(id("iv_avatar").findOne()));
+        sleep(1000);
+        if (text("签到").exists()) {
+            click("签到");
+        }
+    } else {
+        toast("软件不存在，进行下一个");
+    }
+    toast("开始下一个，等待3秒钟");
+    sleep(3000);
+}
 // log(getPackageName("OPPO 社区"));
 
 function communitySign() {
