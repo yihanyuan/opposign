@@ -132,8 +132,9 @@ function healthSign() {
     if (app.launchPackage("com.heytap.health")) {
         sleep(4000);
         closeupdate();
-        id("iv_avatar").waitFor();
-        log(click(id("iv_avatar").findOne()));
+        log(id("iv_avatar").waitFor());
+        var b = id("iv_avatar").findOne(3000).bounds();
+        click(b.centerX(), b.centerY());
         sleep(1000);
         if (text("签到").exists()) {
             click("签到");
@@ -359,8 +360,10 @@ function speechassistSign() {
 //关闭升级和广告之类的
 function closeupdate() {
     log("进入关闭广告");
+    sleep(2000);
+    //多休眠几秒，防止广告太长
     var cancel = textContains("取消");
-    if (textContains("版本").exists() || cancel.exists()) {
+    if (textContains("版本").exists() || cancel.exists() || textContains("稍后").exists()) {
         toast("取消升级");
         click(cancel.findOne().bounds().centerX(), cancel.findOne().bounds().centerY());
         sleep(1000);
