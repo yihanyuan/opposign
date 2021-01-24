@@ -12,28 +12,29 @@ ui.layout(
 
 );
 
-ui.addGroup.click(function () {
+ui.addGroup.click(function() {
     toQqGroup()
 });
-ui.start.click(function () {
-    threads.start(function () {
+ui.start.click(function() {
+    threads.start(function() {
         main();
     });
 });
-ui.startugcvideo.click(function () {
-    threads.start(function () {
+ui.startugcvideo.click(function() {
+    threads.start(function() {
         ugcvideo();
     });
 });
-ui.startyoli.click(function () {
-    threads.start(function () {
+ui.startyoli.click(function() {
+    threads.start(function() {
         yoli();
     });
 });
 
-ui.on.click(function () {
+ui.on.click(function() {
     auto.waitFor();
 });
+
 function toQqGroup() {
     app.startActivity({
         action: "android.intent.action.VIEW",
@@ -48,12 +49,12 @@ function yoli() {
         sleep(4000);
         var target = id("comment_cnt");
         log(target.click());
-        setInterval(function () {
+        setInterval(function() {
             var lq = id("awards").findOne().bounds();
             click(lq.centerX(), lq.centerY());
             sleep(1000);
             text("领取").findOne().click();
-        }, 1000 * 60 * 5);
+        }, 1000 * 60 * 7);
 
         // back();
         // while()
@@ -66,6 +67,7 @@ function yoli() {
         toast("软件不存在，进行下一个");
     }
 }
+
 function ugcvideo() {
     toast("打开暴赞小视屏");
     if (app.launchPackage("com.heytap.ugcvideo.praise")) {
@@ -73,9 +75,9 @@ function ugcvideo() {
         sleep(2000);
         var count = 1;
         while (count < 11 * 6) {
-            log(swipe(device.width / 2, device.height * 3 / 4, device.width / 2, device.height / 2, 500));
+            log(swipe(device.width / 2, device.height * 3 / 4, device.width / 2, device.height / 5, 100));
             toast("10秒后滑动");
-            sleep(10000);
+            sleep(12000);
         }
         var lq = id("awards").findOne().bounds();
         click(lq.centerX(), lq.centerY());
@@ -86,6 +88,7 @@ function ugcvideo() {
         toast("软件不存在，进行下一个");
     }
 }
+
 function main() {
     toast("等待3秒钟");
     sleep(3000);
@@ -127,6 +130,7 @@ function storeSign() {
     toast("开始下一个，等待3秒钟");
     sleep(3000);
 }
+
 function healthSign() {
     toast("打开运动健康");
     if (app.launchPackage("com.heytap.health")) {
@@ -357,25 +361,7 @@ function speechassistSign() {
     toast("开始下一个，等待3秒钟");
     sleep(3000);
 }
-//关闭升级和广告之类的
-function closeupdate() {
-    log("进入关闭广告");
-    sleep(2000);
-    //多休眠几秒，防止广告太长
-    var cancel = textContains("取消");
-    if (textContains("版本").exists() || cancel.exists() || textContains("稍后").exists()) {
-        toast("取消升级");
-        click(cancel.findOne().bounds().centerX(), cancel.findOne().bounds().centerY());
-        sleep(1000);
-    }
-    var ad = id("close");
-    if (ad.exists()) {
-        toast("关闭广告");
-        click(ad.findOne().bounds().centerX(), ad.findOne().bounds().centerY());
-        sleep(1000);
-    }
-    log("结束");
-}
+
 
 
 // log(getPackageName("Soloop 即录"));com.coloros.videoeditor
@@ -488,4 +474,40 @@ function browserSign() {
     }
     toast("开始下一个，等待3秒钟");
     sleep(3000);
+}
+
+//关闭升级和广告之类的
+function closeupdate() {
+    log("进入关闭广告");
+    var cancel = textContains("取消");
+    if (cancel.exists()) {
+        toast("取消升级");
+        click(cancel.findOne().bounds().centerX(), cancel.findOne().bounds().centerY());
+        sleep(1000);
+    }
+    var cancel2 = text("稍后");
+    if (cancel2.exists()) {
+        toast("取消升级");
+        click(cancel2.findOne().bounds().centerX(), cancel2.findOne().bounds().centerY());
+        sleep(1000);
+    }
+    cancel2 = text("暂不更新");
+    if (cancel2.exists()) {
+        toast("取消升级");
+        click(cancel2.findOne().bounds().centerX(), cancel2.findOne().bounds().centerY());
+        sleep(1000);
+    }
+    var ad = id("dialog_clos_image");
+    if (ad.exists()) {
+        toast("关闭广告");
+        click(ad.findOne().bounds().centerX(), ad.findOne().bounds().centerY());
+        sleep(1000);
+    }
+    ad = id("close");
+    if (ad.exists()) {
+        toast("关闭广告");
+        click(ad.findOne().bounds().centerX(), ad.findOne().bounds().centerY());
+        sleep(1000);
+    }
+    log("结束");
 }
